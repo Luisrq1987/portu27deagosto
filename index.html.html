@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Use of Portuguese • Panel B1–B2 (sin escribir)</title>
+  <style>
+    :root{
+      /* Paleta clara y alegre */
+      --bg1:#ffffff;
+      --bg2:#fffbe6; /* vainilla suave */
+      --card:rgba(255,255,255,.9);
+      --muted:#475569; /* slate-600 */
+      --accent:#22c55e; /* emerald-500 para acentos sutiles */
+      --ok:#16a34a; /* green-600 */
+      --bad:#ef4444; /* red-500 */
+      --warn:#f59e0b; /* amber-500 */
+      --text:#0f172a; /* slate-900 */
+      --chip:#ffffff; /* base clara */
+      --chipHover:#f1f5f9; /* slate-100 */
+      --chipSel:#38bdf8; /* sky-400 */
+      --glass: blur(8px);
+      --radius: 18px;
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at -10% -10%, rgba(255,221,87,.35) 0%, transparent 60%),
+        radial-gradient(900px 600px at 110% 10%, rgba(111,207,151,.28) 0%, transparent 60%),
+        radial-gradient(800px 600px at 50% 120%, rgba(99,102,241,.20) 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg1));
+      min-height:100%;
+    }
+
+    header{
+      padding: 28px 18px 12px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px; flex-wrap:wrap;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{
+      width:42px; height:42px; border-radius:12px;
+      background: conic-gradient(from 210deg, #22c55e, #38bdf8, #a78bfa, #f59e0b, #22c55e);
+      filter: drop-shadow(0 6px 16px rgba(56,189,248,.35));
+    }
+    .title{ line-height:1.1 }
+    .title h1{margin:0; font-size: clamp(1.15rem, 1.2rem + 1.4vw, 2rem); letter-spacing:.2px}
+    .title p{margin:.1rem 0 0; color:var(--muted); font-size:.95rem}
+
+    main{ max-width:1100px; margin: 12px auto 64px; padding: 0 16px; }
+
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.7));
+      backdrop-filter: var(--glass);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 36px rgba(2,6,23,.08);
+      overflow:hidden;
+    }
+
+    .toolbar{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; padding: 14px; border-bottom:1px solid rgba(0,0,0,.06); background: linear-gradient(180deg, rgba(56,189,248,.12), rgba(56,189,248,.06));}
+    .toolbar .group{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+
+    .select, .btn{
+      background: var(--chip);
+      color:var(--text);
+      border:1px solid #e2e8f0; /* slate-200 */
+      border-radius: 12px; padding: 10px 12px; font-size:.95rem;
+    }
+    .btn{ cursor:pointer; transition:.2s ease; }
+    .btn:hover{ background: var(--chipHover)}
+    .btn.ghost{ background: transparent; border-color: #cbd5e1 }
+
+    .stats{ display:flex; gap:10px; align-items:center }
+    .badge{ font-size:.85rem; padding:6px 10px; border-radius: 999px; border:1px solid rgba(0,0,0,.08); background: rgba(0,0,0,.05)}
+
+    .progressWrap{ flex: 1; min-width: 160px; height:8px; background: #e2e8f0; border-radius: 999px; overflow:hidden}
+    .progress{ height:100%; width:0; background: linear-gradient(90deg, #38bdf8, #a78bfa); transition: width .4s ease}
+
+    .content{ display:grid; grid-template-columns: 1.2fr .8fr; gap:0; }
+    @media (max-width: 980px){ .content{ grid-template-columns: 1fr; } }
+
+    .left{ padding: 10px 16px 18px; }
+    .right{ border-left:1px solid rgba(0,0,0,.06); padding: 10px 16px 18px; background: linear-gradient(180deg, rgba(56,189,248,.06), rgba(249,115,22,.06)); }
+
+    .intro{ color:var(--muted); margin: 10px 0 18px; font-size: 1rem }
+
+    .card{
+      background: #ffffff;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius: 16px; padding: 14px 14px 10px; margin: 10px 0 14px;
+      box-shadow: 0 6px 14px rgba(2,6,23,.05);
+    }
+    .card h3{ margin: 0 0 4px; font-size: 1.02rem }
+    .card p{ margin: 6px 0 0; }
+
+    .clozeText{ line-height:1.75; font-size: 1.05rem }
+
+    .gap{ display:inline-flex; gap:6px; align-items:center; margin: 0 4px; padding:2px 2px; background: rgba(0,0,0,.04); border:1px dashed rgba(0,0,0,.12); border-radius: 12px }
+    .chip{ display:inline-flex; align-items:center; gap:6px; margin:4px; padding:10px 12px; border-radius: 999px; background: var(--chip); border:1px solid rgba(0,0,0,.12); cursor:pointer; transition:.15s ease; user-select:none; font-size:1rem }
+    .chip:hover{ background: var(--chipHover)}
+    .chip[disabled]{ opacity:.7; cursor:not-allowed }
+    .chip.correct{ background: #dcfce7; border-color: #86efac }
+    .chip.wrong{ background: #fee2e2; border-color: #fca5a5 }
+    .chip.selected{ outline: 2px solid var(--chipSel); }
+
+    .explain{ margin: 8px 0 0; color: var(--muted); font-size:.96rem }
+    .explain.ok{ color: #166534 }
+    .explain.bad{ color: #b91c1c }
+
+    .aside{ position: sticky; top: 10px }
+    .aside h4{ margin:6px 0 8px }
+    .legend{ display:flex; gap:6px; flex-wrap:wrap; margin: 8px 0 12px }
+    .legend span{ font-size:.85rem; padding:6px 10px; border-radius:999px; background: rgba(0,0,0,.04); border:1px solid rgba(0,0,0,.08)}
+
+    .footer{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; padding: 14px; border-top:1px solid rgba(0,0,0,.06); background: linear-gradient(180deg, rgba(56,189,248,.06), rgba(255,255,255,.6)); }
+
+    .counter{ font-size:.95rem; color:var(--muted) }
+
+    .pill{ padding: 10px 12px; border-radius: 12px; border:1px solid rgba(0,0,0,.08); background: rgba(255,255,255,.9) }
+    .small{ font-size:.9rem }
+
+    .hidden{ display:none }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div class="title">
+        <h1>Panel “Use of Portuguese” — Nivel B1–B2</h1>
+        <p>Sin escribir: elige opciones. Feedback inmediato. Ideal para practicar y evaluar.</p>
+      </div>
+    </div>
+    <div class="stats">
+      <span class="badge" id="scoreBadge">Puntuación: 0</span>
+      <span class="badge" id="doneBadge">0 / 0 resueltas</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="toolbar">
+        <div class="group">
+          <label for="setSelect" class="small" title="Selecciona el tipo de ejercicio y lote de preguntas">Conjunto:</label>
+          <select id="setSelect" class="select"></select>
+          <button class="btn" id="shuffleBtn" title="Barajar preguntas">Barajar</button>
+          <button class="btn ghost" id="resetBtn" title="Reiniciar este conjunto">Reiniciar</button>
+        </div>
+        <div class="group" style="flex:1; align-items:center; gap:12px">
+          <div class="progressWrap" aria-hidden="true"><div id="progress" class="progress"></div></div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="left">
+          <p class="intro" id="introText">Selecciona un conjunto para empezar.</p>
+          <div id="items"></div>
+        </div>
+        <aside class="right">
+          <div class="aside">
+            <h4>Cómo funciona</h4>
+            <div class="legend">
+              <span>• Toca una opción para cada hueco o frase.</span>
+              <span>• Se corrige al instante y se explica.</span>
+              <span>• Puedes cambiar de conjunto en cualquier momento.</span>
+            </div>
+            <div class="card">
+              <h3>Áreas (B1–B2)</h3>
+              <p class="small">• Conectores y preposiciones · <em>porque, apesar de, em, a, para, por...</em><br/>
+              • Tiempos y modos verbales · <em>pretérito perfeito/imperfeito, condicional, conjuntivo</em><br/>
+              • Formación de palabras · <em>prefixos e sufixos: -dade, -mente, in-/im-, -ção</em><br/>
+              • Reescritura equivalente · <em>apesar de / embora, foi... que (cleft), mal/assim que</em></p>
+            </div>
+            <div class="card">
+              <h3>Consejo didáctico</h3>
+              <p class="small">Activa “Barajar” para variar el orden. Úsalo como warm‑up, estaciones de aprendizaje o mini‑test rápido.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="footer">
+        <span class="counter" id="counterText">Listo para empezar.</span>
+        <div class="group">
+          <button class="btn" id="checkAllBtn" title="Marcar como revisado lo contestado hasta ahora">Comprobar todo</button>
+          <button class="btn ghost" id="showSolutionsBtn" title="Mostrar soluciones de este conjunto">Mostrar soluciones</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+  // ========== DATOS DE LOS EJERCICIOS (B1–B2) ==========
+  // Estructura general: conjuntos (sets) con items.
+  // Tipos soportados: "cloze", "wordform", "transform", "connectors".
+
+  const SETS = [
+    {
+      id: 'cloze1',
+      title: 'Cloze • Texto con huecos (opciones)',
+      intro: 'Completa cada texto eligiendo la opción correcta para cada hueco.',
+      type: 'cloze',
+      items: [
+        {
+          id: 'c1',
+          text: 'Quando cheguei a casa, <gap id="g1"/> muita fome, por isso <gap id="g2"/> uma sopa.',
+          gaps: [
+            { key: 'g1', options: ['tinha', 'tive', 'tenho'], answer: 'tinha', explain: 'No passado como pano de fondo ⇒ pretérito imperfeito: "eu tinha".'},
+            { key: 'g2', options: ['preparava', 'preparei', 'preparo'], answer: 'preparei', explain: 'Acción puntual y terminada ⇒ pretérito perfeito simples.'}
+          ]
+        },
+        {
+          id: 'c2',
+          text: 'Se eu <gap id="g1"/> tempo, <gap id="g2"/> contigo ao cinema.',
+          gaps: [
+            { key: 'g1', options: ['tiver', 'tinha', 'terei'], answer: 'tiver', explain: 'Oración condicional real en futuro ⇒ conjuntivo (subjuntivo) presente: "se eu tiver".'},
+            { key: 'g2', options: ['vou', 'iria', 'iria ir'], answer: 'vou', explain: 'Consecuencia probable en futuro cercano ⇒ presente con valor de futuro: "vou".'}
+          ]
+        },
+        {
+          id: 'c3',
+          text: 'A Maria <gap id="g1"/> em Coimbra desde 2021 e ainda <gap id="g2"/> com os pais.',
+          gaps: [
+            { key: 'g1', options: ['mora', 'morou', 'morava'], answer: 'mora', explain: 'Estado que começou no passado e se prolonga ⇒ presente con valor durativo.'},
+            { key: 'g2', options: ['vive', 'viviu', 'vivia'], answer: 'vive', explain: 'Portugués: "vive" (no *viviu*). Forma simple en presente.'}
+          ]
+        },
+        {
+          id: 'c4',
+          text: 'Se ele <gap id="g1"/> mais cedo, <gap id="g2"/> o comboio.',
+          gaps: [
+            { key: 'g1', options: ['tivesse chegado', 'chegar', 'chegasse'], answer: 'tivesse chegado', explain: 'Condicional irrealis/hipotética no passado ⇒ mais-que-perfeito composto do conjuntivo.'},
+            { key: 'g2', options: ['apanharia', 'apanhava', 'apanhará'], answer: 'apanharia', explain: 'Consecuencia hipotética ⇒ condicional simple: "apanharia".'}
+          ]
+        },
+        {
+          id: 'c5',
+          text: 'Embora <gap id="g1"/> cansados, nós <gap id="g2"/> a caminhada até ao fim.',
+          gaps: [
+            { key: 'g1', options: ['estejamos', 'estivéssemos', 'estar'], answer: 'estivéssemos', explain: 'Concessiva en pasado ⇒ conjuntivo imperfeito: "embora estivéssemos".'},
+            { key: 'g2', options: ['terminámos', 'terminamos', 'terminávamos'], answer: 'terminámos', explain: 'Acción puntual concluida ⇒ pretérito perfeito: "terminámos" (PT-PT).'}
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'wordform1',
+      title: 'Formação de palavras • Derivación (opciones)',
+      intro: 'Elige la forma derivada que completa la frase.',
+      type: 'wordform',
+      items: [
+        { id:'w1', stem:'responsável', sentence:'Temos de agir com ____.', options:['responsabilidade','irresponsável','responsavelmente'], answer:'responsabilidade', explain:'Nombre abstracto con -dade: responsabilidade.' },
+        { id:'w2', stem:'possível', sentence:'Era totalmente ____ realizar o plano naquela altura.', options:['impossível','despossível','inpossível'], answer:'impossível', explain:'Prefijo negativo im- delante de p/b: impossível.' },
+        { id:'w3', stem:'feliz', sentence:'Apesar das dificuldades, as crianças riram ____.', options:['felizmente','felicidade','infelicidade'], answer:'felizmente', explain:'Adverbio de modo con -mente: felizmente.' },
+        { id:'w4', stem:'memória', sentence:'O exercício ajuda na ____ do vocabulário.', options:['memorização','memorável','memorizar'], answer:'memorização', explain:'Nombre en -ção para el proceso: memorização.' },
+        { id:'w5', stem:'seguro', sentence:'A proposta não é ____ para os alunos.', options:['segura','seguridade','assegurar'], answer:'segura', explain:'Adjetivo concordando con "proposta" (fem.): segura.' }
+      ]
+    },
+
+    {
+      id: 'transform1',
+      title: 'Transformações de frase • Equivalência de sentido',
+      intro: 'Selecciona a reescritura que mantém o mesmo sentido da frase original (com a palavra-chave indicada).',
+      type: 'transform',
+      items: [
+        {
+          id:'t1',
+          base:'Comprei o livro ontem. (Palavra‑chave: «foi»)',
+          options:[
+            'Foi ontem que comprei o livro.',
+            'Foi ontem quando comprei o livro.',
+            'Foi ontem em que comprei o livro.'
+          ],
+          answer:'Foi ontem que comprei o livro.',
+          explain:'Estrutura de clivada (cleft): «Foi X que…». Não se usa *quando* nem *em que*.'
+        },
+        {
+          id:'t2',
+          base:'Embora estivesse cansado, continuou a trabalhar. (Palavra‑chave: «apesar de»)',
+          options:[
+            'Apesar de estar cansado, continuou a trabalhar.',
+            'Apesar que estava cansado, continuou a trabalhar.',
+            'Apesar de que estava cansado, continuou a trabalhar.'
+          ],
+          answer:'Apesar de estar cansado, continuou a trabalhar.',
+          explain:'«Apesar de» + infinitivo flexionado/gerúndio: «de estar». As outras formas são agramaticais.'
+        },
+        {
+          id:'t3',
+          base:'Assim que chegar, ligo‑te. (Palavra‑chave: «mal»)',
+          options:[
+            'Mal chegar, ligo‑te.',
+            'Mal chegue, ligar‑te‑ei.',
+            'Mal que chegar, ligo‑te.'
+          ],
+          answer:'Mal chegar, ligo‑te.',
+          explain:'«Mal» com valor temporal (= logo que) seguido de infinitivo pessoal simples é natural no português europeu.'
+        },
+        {
+          id:'t4',
+          base:'Se eu fosse rico, compraria uma casa. (Palavra‑chave: «caso»)',
+          options:[
+            'Caso fosse rico, compraria uma casa.',
+            'Caso eu fosse rico, comprava uma casa ontem.',
+            'Caso seria rico, compraria uma casa.'
+          ],
+          answer:'Caso fosse rico, compraria uma casa.',
+          explain:'«Caso» + conjuntivo imperfeito exprime condição hipotética; mantém o condicional na principal.'
+        }
+      ]
+    },
+
+    {
+      id: 'connect1',
+      title: 'Conectores & Preposições • Escolha múltipla',
+      intro: 'Escolhe o conector/preposição adequado em cada frase.',
+      type: 'connectors',
+      items: [
+        {
+          id:'p1',
+          sentence:'____ chuva, fomos ao parque.',
+          options:['Apesar da','Por causa da','Graças à'],
+          answer:'Apesar da',
+          explain:'Concessão: «Apesar da chuva,…». As outras introduzem causa positiva/negativa.'
+        },
+        {
+          id:'p2',
+          sentence:'Ele está interessado ____ aprender português.',
+          options:['em','a','de'],
+          answer:'em',
+          explain:'«Interessado em + infinitivo».'
+        },
+        {
+          id:'p3',
+          sentence:'Fui ____ Lisboa ____ Porto de comboio.',
+          options:['de / para o','a / de','para / a'],
+          answer:'de / para o',
+          explain:'Origem «de Lisboa» e destino «para o Porto».'
+        },
+        {
+          id:'p4',
+          sentence:'Trabalhamos mesmo ____ sábado quando é preciso.',
+          options:['ao','no','de'],
+          answer:'ao',
+          explain:'Dias da semana com valor habitual: «ao sábado» (PT‑PT).'
+        },
+        {
+          id:'p5',
+          sentence:'Ele faltou ____ aula ____ doença.',
+          options:['à / por','a / para','na / por causa de'],
+          answer:'à / por',
+          explain:'«Faltar a (algo)» e «por (motivo)».'
+        }
+      ]
+    }
+  ];
+
+  // ========== LÓGICA DE RENDERIZADO E INTERACCIÓN ==========
+
+  const setSelect = document.getElementById('setSelect');
+  const itemsEl = document.getElementById('items');
+  const introText = document.getElementById('introText');
+  const scoreBadge = document.getElementById('scoreBadge');
+  const doneBadge = document.getElementById('doneBadge');
+  const progressBar = document.getElementById('progress');
+  const counterText = document.getElementById('counterText');
+
+  const resetBtn = document.getElementById('resetBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const showSolutionsBtn = document.getElementById('showSolutionsBtn');
+  const checkAllBtn = document.getElementById('checkAllBtn');
+
+  let currentSet = null;
+  let state = { answered: 0, total: 0, score: 0 };
+
+  function populateSelect(){
+    setSelect.innerHTML = '';
+    SETS.forEach((s, i)=>{
+      const opt = document.createElement('option');
+      opt.value = s.id; opt.textContent = `${i+1}. ${s.title}`; setSelect.appendChild(opt);
+    });
+  }
+
+  function deepClone(obj){ return JSON.parse(JSON.stringify(obj)); }
+
+  function computeTotals(set){
+    let total = 0;
+    if(set.type==='cloze'){
+      set.items.forEach(it=> total += it.gaps.length);
+    } else {
+      total = set.items.length;
+    }
+    return total;
+  }
+
+  function initSet(setId){
+    const base = SETS.find(s=>s.id===setId);
+    currentSet = deepClone(base);
+    state.answered = 0; state.score = 0; state.total = computeTotals(currentSet);
+    updateHeader();
+    introText.textContent = currentSet.intro;
+    renderItems();
+  }
+
+  function updateHeader(){
+    scoreBadge.textContent = `Puntuación: ${state.score}`;
+    doneBadge.textContent = `${state.answered} / ${state.total} resueltas`;
+    const pct = state.total? Math.round((state.answered/state.total)*100):0;
+    progressBar.style.width = pct + '%';
+    counterText.textContent = `Progreso: ${pct}%`;
+  }
+
+  function renderItems(){
+    itemsEl.innerHTML = '';
+    if(currentSet.type==='cloze'){
+      currentSet.items.forEach((it, idx)=>{
+        const card = document.createElement('div'); card.className='card';
+        const h = document.createElement('h3'); h.textContent = `Texto ${idx+1}`; card.appendChild(h);
+        const p = document.createElement('p'); p.className='clozeText';
+        // Construir el texto con gaps
+        let html = it.text;
+        it.gaps.forEach((g, i)=>{
+          const chips = g.options.map(opt=>`<button class="chip" data-kind="gap" data-it="${it.id}" data-key="${g.key}" data-ans="${g.answer}" data-opt="${opt}">${opt}</button>`).join('');
+          const gapHTML = `<span class="gap" data-key="${g.key}">${chips}</span>`;
+          html = html.replace(`<gap id="${g.key}"/>`, gapHTML);
+        });
+        p.innerHTML = html;
+        card.appendChild(p);
+        const ex = document.createElement('p'); ex.className='explain hidden'; ex.id = `ex-${it.id}`; card.appendChild(ex);
+        itemsEl.appendChild(card);
+      });
+    }
+
+    if(currentSet.type==='wordform'){
+      currentSet.items.forEach((it, idx)=>{
+        const card = document.createElement('div'); card.className='card';
+        const h = document.createElement('h3'); h.textContent = `Derivación ${idx+1}`; card.appendChild(h);
+        const p = document.createElement('p'); p.innerHTML = `<em>Base:</em> <strong>${it.stem}</strong>`; card.appendChild(p);
+        const q = document.createElement('p'); q.textContent = it.sentence; card.appendChild(q);
+        const opts = document.createElement('div');
+        it.options.forEach(opt=>{
+          const b = document.createElement('button'); b.className='chip'; b.textContent = opt;
+          b.dataset.kind='single'; b.dataset.it=it.id; b.dataset.ans=it.answer; b.dataset.opt=opt; card.appendChild(b);
+        });
+        const ex = document.createElement('p'); ex.className='explain hidden'; ex.id = `ex-${it.id}`; card.appendChild(ex);
+        itemsEl.appendChild(card);
+      });
+    }
+
+    if(currentSet.type==='transform'){
+      currentSet.items.forEach((it, idx)=>{
+        const card = document.createElement('div'); card.className='card';
+        const h = document.createElement('h3'); h.textContent = `Transformación ${idx+1}`; card.appendChild(h);
+        const p = document.createElement('p'); p.textContent = it.base; card.appendChild(p);
+        it.options.forEach(opt=>{
+          const b = document.createElement('button'); b.className='chip'; b.textContent = opt;
+          b.dataset.kind='single'; b.dataset.it=it.id; b.dataset.ans=it.answer; b.dataset.opt=opt; card.appendChild(b);
+        });
+        const ex = document.createElement('p'); ex.className='explain hidden'; ex.id = `ex-${it.id}`; card.appendChild(ex);
+        itemsEl.appendChild(card);
+      });
+    }
+
+    if(currentSet.type==='connectors'){
+      currentSet.items.forEach((it, idx)=>{
+        const card = document.createElement('div'); card.className='card';
+        const h = document.createElement('h3'); h.textContent = `Conector ${idx+1}`; card.appendChild(h);
+        const p = document.createElement('p'); p.textContent = it.sentence; card.appendChild(p);
+        it.options.forEach(opt=>{
+          const b = document.createElement('button'); b.className='chip'; b.textContent = opt;
+          b.dataset.kind='single'; b.dataset.it=it.id; b.dataset.ans=it.answer; b.dataset.opt=opt; card.appendChild(b);
+        });
+        const ex = document.createElement('p'); ex.className='explain hidden'; ex.id = `ex-${it.id}`; card.appendChild(ex);
+        itemsEl.appendChild(card);
+      });
+    }
+
+    wireClicks();
+    updateHeader();
+  }
+
+  function handleCorrect(btn){
+    if(btn.classList.contains('correct')) return; // ya marcado
+    btn.classList.remove('wrong');
+    btn.classList.add('correct');
+    btn.setAttribute('disabled', 'true');
+    // bloquear hermanos del mismo grupo
+    const parent = btn.closest('.card');
+    const isGap = btn.dataset.kind==='gap';
+    if(isGap){
+      // cuenta como 1 hueco
+      state.score += 1; state.answered += 1; updateHeader();
+      const gapWrap = btn.closest('.gap');
+      gapWrap.querySelectorAll('.chip').forEach(ch=>{ if(ch!==btn){ ch.setAttribute('disabled','true'); ch.classList.add('selected'); ch.classList.remove('wrong'); } });
+      const itId = btn.dataset.it;
+      showExplain(itId, true, findExplain(currentSet, itId, btn.dataset.key));
+    } else {
+      // pregunta de opción única
+      state.score += 1; state.answered += 1; updateHeader();
+      const itId = btn.dataset.it;
+      const siblings = parent.querySelectorAll(`.chip[data-it="${itId}"]`);
+      siblings.forEach(ch=>{ if(ch!==btn){ ch.setAttribute('disabled','true'); ch.classList.add('selected'); ch.classList.remove('wrong'); } });
+      showExplain(itId, true, findExplain(currentSet, itId));
+    }
+  }
+
+  function handleWrong(btn){
+    btn.classList.add('wrong');
+    // no sumamos answered hasta que acierta; dejamos intento múltiple sin penalizar
+    const itId = btn.dataset.it;
+    showExplain(itId, false, findExplain(currentSet, itId, btn.dataset.key));
+  }
+
+  function findExplain(set, itId, gapKey=null){
+    if(set.type==='cloze'){
+      const it = set.items.find(x=>x.id===itId);
+      if(!it) return '';
+      if(gapKey){
+        const g = it.gaps.find(y=>y.key===gapKey);
+        return g?.explain || '';
+      }
+      return '';
+    }
+    if(set.type==='wordform' || set.type==='transform' || set.type==='connectors'){
+      const it = set.items.find(x=>x.id===itId);
+      return it?.explain || '';
+    }
+    return '';
+  }
+
+  function showExplain(itId, ok, text){
+    const ex = document.getElementById(`ex-${itId}`);
+    if(!ex) return;
+    if(!text){ ex.classList.add('hidden'); return; }
+    ex.textContent = (ok? '✔ ' : '✖ ') + text;
+    ex.classList.remove('hidden');
+    ex.classList.toggle('ok', ok);
+    ex.classList.toggle('bad', !ok);
+  }
+
+  function wireClicks(){
+    itemsEl.querySelectorAll('.chip').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        const b = e.currentTarget;
+        const chosen = b.dataset.opt;
+        const ans = b.dataset.ans;
+        if(chosen===ans){ handleCorrect(b); }
+        else { handleWrong(b); }
+      })
+    })
+  }
+
+  function resetCurrent(){ initSet(currentSet.id); }
+
+  function shuffleCurrent(){
+    if(!currentSet) return;
+    // barajar items
+    currentSet.items.sort(()=>Math.random()-.5);
+    // en cloze barajar opciones por hueco
+    if(currentSet.type==='cloze'){
+      currentSet.items.forEach(it=> it.gaps.forEach(g=> g.options.sort(()=>Math.random()-.5)));
+    } else {
+      currentSet.items.forEach(it=> it.options?.sort(()=>Math.random()-.5));
+    }
+    state.answered = 0; state.score = 0; updateHeader(); renderItems();
+  }
+
+  function showSolutions(){
+    if(!currentSet) return;
+    const all = itemsEl.querySelectorAll('.chip');
+    all.forEach(btn=>{
+      if(btn.dataset.opt===btn.dataset.ans){
+        if(!btn.classList.contains('correct')){
+          // marcar pero no sumar puntos, solo visual
+          btn.classList.add('correct');
+        }
+      } else {
+        btn.classList.add('selected'); btn.setAttribute('disabled','true');
+      }
+    });
+  }
+
+  function checkAll(){
+    if(!currentSet) return;
+    // considera como respondidas las que estén correctas; útil para cerrar el set
+    const corrects = itemsEl.querySelectorAll('.chip.correct');
+    const totalNow = currentSet.type==='cloze' ? Array.from(itemsEl.querySelectorAll('.gap')).length : currentSet.items.length;
+    state.score = corrects.length;
+    state.answered = corrects.length;
+    state.total = totalNow; // por si en el futuro hay filtros
+    updateHeader();
+  }
+
+  // ========== EVENTOS DE UI ==========
+
+  populateSelect();
+  initSet(SETS[0].id);
+
+  setSelect.addEventListener('change', (e)=> initSet(e.target.value));
+  resetBtn.addEventListener('click', resetCurrent);
+  shuffleBtn.addEventListener('click', shuffleCurrent);
+  showSolutionsBtn.addEventListener('click', showSolutions);
+  checkAllBtn.addEventListener('click', checkAll);
+
+  </script>
+</body>
+</html>
